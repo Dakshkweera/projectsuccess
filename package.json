@@ -1,0 +1,56 @@
+{
+  "name": "chrome",
+  "productName": "Chrome",
+  "version": "1.0.0",
+  "description": "Chrome",
+  "author": "VividhDesign",
+  "main": "main.js",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "dev": "node scripts/start.js",
+    "build": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build:win:dir": "electron-builder --win dir",
+    "build:dir": "electron-builder --mac dir",
+    "verify:windows": "electron scripts/verify-windows.js",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.vividhdesign.chrome",
+    "productName": "Chrome",
+    "icon": "chrome_logo.png",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        { "target": "dir", "arch": ["arm64"] }
+      ],
+      "minimumSystemVersion": "10.15.0",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "entitlements.mac.plist",
+      "entitlementsInherit": "entitlements.mac.plist",
+      "identity": null
+    },
+    "win": {
+      "icon": "chrome_logo.png",
+      "target": [
+        { "target": "dir", "arch": ["x64"] }
+      ]
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "style.css",
+      "interview-helper/**/*",
+      "chrome_logo.png",
+      "package.json"
+    ],
+    "asar": true
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^25.1.8"
+  }
+}

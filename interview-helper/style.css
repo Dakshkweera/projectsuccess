@@ -1,0 +1,443 @@
+/* ── Real-Time Interview Helper Styles ── */
+
+.interview-helper-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* Header bar */
+.ih-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ih-status-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ih-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-dim);
+}
+
+.ih-badge.active {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--green);
+}
+
+.ih-badge.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.ih-badge.danger {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--red);
+}
+
+.ih-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.ih-badge.active .ih-pulse-dot {
+  animation: ihPulse 1.5s infinite;
+}
+
+/* Opacity only: a constantly scaling element keeps the GPU re-compositing the header */
+@keyframes ihPulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.ih-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ih-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+
+.ih-btn:hover {
+  background: var(--surface-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.ih-btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.ih-btn-primary:hover {
+  background: #6c5ae0;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.ih-btn-danger {
+  background: rgba(248, 113, 113, 0.2);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.ih-btn-danger:hover {
+  background: rgba(248, 113, 113, 0.35);
+}
+
+/* Main body scrollable */
+.ih-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Bottom "listening" footer: telemetry + live question, always visible */
+.ih-listen-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+.ih-listen-footer .ih-question-card { padding: 8px 10px; }
+.ih-listen-footer .ih-question-text {
+  font-size: 12.5px;
+  max-height: 4.4em; /* ~3 lines; long questions scroll inside the footer */
+  overflow-y: auto;
+}
+
+.ih-listen-footer .ih-question-text { white-space: pre-line; } /* manual mode shows two lines */
+
+.ih-controls-row { display: flex; align-items: center; gap: 6px; }
+.ih-controls-row .ih-btn { padding: 2px 8px; font-size: 10.5px; }
+.ih-mode-select {
+  flex: 1; min-width: 0; height: 22px; padding: 0 4px;
+  font-size: 10.5px; font-family: inherit; cursor: pointer;
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 6px; outline: none;
+}
+.ih-mode-select option { background: #1a1a2e; }
+
+/* Auto / Manual segmented switch */
+.ih-seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.ih-seg button {
+  padding: 2px 9px; font-size: 10.5px; font-family: inherit; cursor: pointer;
+  border: none; background: transparent; color: var(--text-muted);
+}
+.ih-seg button + button { border-left: 1px solid var(--border); }
+.ih-seg button.active { background: var(--accent); color: #fff; }
+
+/* Earlier answers */
+.ih-history { margin-top: 2px; }
+.ih-history-title {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--text-muted); margin: 4px 2px 6px;
+}
+.ih-history-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; background: rgba(255, 255, 255, 0.02); }
+.ih-history-item summary {
+  cursor: pointer; padding: 6px 10px; font-size: 12px; color: var(--text-dim);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ih-history-item[open] summary { white-space: normal; color: var(--text); }
+.ih-history-time { font-size: 10px; color: var(--text-muted); margin-right: 6px; }
+.ih-history-body { padding: 0 10px 10px; font-size: 12.5px; line-height: 1.5; }
+.ih-history-body .ih-tier2-content { margin-top: 8px; }
+
+.ih-mic-answer-toggle { padding: 2px 8px; font-size: 10.5px; color: var(--text-muted); }
+.ih-mic-answer-toggle.on { color: var(--green); border-color: rgba(74, 222, 128, 0.4); background: rgba(74, 222, 128, 0.08); }
+
+.ih-answers-empty {
+  margin: auto;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Active question box */
+.ih-question-card {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.ih-card-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ih-question-text {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #f1f1f5;
+  min-height: 20px;
+  word-break: break-word;
+}
+
+.ih-question-text.speaking {
+  color: #93c5fd;
+}
+
+/* Telemetry & status pill */
+.ih-telemetry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+.ih-state-marker {
+  font-weight: 500;
+  color: var(--openrouter);
+}
+
+.ih-state-marker.thinking {
+  color: #60a5fa;
+  animation: ihBlink 1s infinite;
+}
+
+.ih-state-marker.still-working {
+  color: #fbbf24;
+}
+
+.ih-state-marker.ask-repeat {
+  color: var(--red);
+  font-weight: 600;
+}
+
+@keyframes ihBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Tier 1 Flash Guidance Card */
+.ih-tier1-card {
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(124, 106, 247, 0.08), rgba(20, 184, 166, 0.08));
+  border: 1px solid rgba(124, 106, 247, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ih-tier1-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #a78bfa;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.ih-tier1-content {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f8fafc;
+  white-space: pre-line;
+}
+
+/* Tier 2 Detailed Guidance Card */
+.ih-tier2-card {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.ih-tier2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ih-tier2-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.ih-tier2-content {
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* ── Formatted answers (markdown rendered by formatMarkdown) ── */
+.ih-md { white-space: normal; }
+.ih-md p { margin: 0 0 4px; }
+.ih-md p:last-child, .ih-md ul:last-child, .ih-md ol:last-child { margin-bottom: 0; }
+.ih-md ul, .ih-md ol { margin: 2px 0 4px; padding-left: 16px; }
+.ih-md li { margin: 3px 0; padding-left: 2px; }
+.ih-md li::marker { color: var(--text-muted); }
+.ih-md h1, .ih-md h2, .ih-md h3, .ih-md h4 { font-size: 12px; margin: 6px 0 3px; color: var(--text-dim); }
+.ih-md strong { color: #fcd34d; font-weight: 600; } /* key words pop in amber */
+.ih-md em { color: var(--text-dim); }
+.ih-md code { font-size: 11.5px; padding: 1px 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); }
+.ih-md pre { margin: 4px 0; padding: 6px 8px; border-radius: 6px; background: rgba(0, 0, 0, 0.35); overflow-x: auto; }
+.ih-md pre code { padding: 0; background: none; }
+.ih-md hr { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
+
+/* Tier 1: first line is the direct answer */
+.ih-tier1-md > p:first-child { font-size: 13.5px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+
+/* Tier 2 sections, colour-coded by role */
+.ih-sec {
+  margin-top: 8px;
+  padding: 7px 10px 8px;
+  border-radius: 8px;
+  border-left: 3px solid var(--border);
+  background: rgba(255, 255, 255, 0.025);
+}
+.ih-sec:first-child { margin-top: 0; }
+.ih-sec-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  color: var(--text-dim);
+}
+
+/* 🎯 Say this — the most important block: big, bright, accent */
+.ih-sec-say { border-left-color: var(--accent); background: rgba(124, 106, 247, 0.14); }
+.ih-sec-say .ih-sec-title { color: #c4b5fd; }
+.ih-sec-say .ih-md { font-size: 13.5px; font-weight: 500; color: #fff; line-height: 1.45; }
+.ih-sec-say .ih-md strong { color: #fff; text-decoration: underline; text-decoration-color: rgba(196, 181, 253, 0.6); text-underline-offset: 2px; }
+
+.ih-sec-key { border-left-color: var(--green); background: rgba(74, 222, 128, 0.06); }
+.ih-sec-key .ih-sec-title { color: var(--green); }
+
+.ih-sec-detail .ih-sec-title { color: #7dd3fc; }
+.ih-sec-detail { border-left-color: rgba(125, 211, 252, 0.5); }
+
+.ih-sec-avoid { border-left-color: var(--red); background: rgba(248, 113, 113, 0.07); }
+.ih-sec-avoid .ih-sec-title { color: var(--red); }
+.ih-sec-avoid .ih-md strong { color: #fca5a5; }
+
+.ih-sec-follow { border-left-color: rgba(167, 139, 250, 0.5); }
+.ih-sec-follow .ih-sec-title { color: #a78bfa; }
+.ih-sec-follow .ih-md { color: var(--text-dim); }
+
+/* Setup & Profile Drawer */
+.ih-drawer {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(18, 18, 24, 0.95);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ih-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ih-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.ih-input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+.ih-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.ih-textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+/* Mode switcher in titlebar */
+/* Icon-sized so it fits the 480px titlebar next to settings/new-chat/hide;
+   tinted purple so it stands out from the grey icons. */
+.interview-mode-toggle {
+  flex-shrink: 0;
+  background: rgba(124, 106, 247, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(124, 106, 247, 0.3);
+  transition: all 0.15s ease;
+  -webkit-app-region: no-drag;
+}
+
+.interview-mode-toggle:hover {
+  background: rgba(124, 106, 247, 0.3);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.interview-mode-toggle.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}

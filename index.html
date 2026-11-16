@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chrome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="interview-helper/style.css" />
+</head>
+<body>
+
+  <!-- ── Titlebar ── -->
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-left">
+      <div class="status-dot" id="statusDot"></div>
+
+      <!-- Provider toggle -->
+      <div class="provider-tabs">
+        <button class="provider-tab" id="tabOllama" data-provider="ollama" title="Local Ollama">
+          🦙 Ollama
+        </button>
+        <button class="provider-tab" id="tabGemini" data-provider="gemini" title="Google Gemini">
+          ✦ Gemini
+        </button>
+        <button class="provider-tab" id="tabGroq" data-provider="groq" title="Groq (Fast Inference)">
+          ⚡ Groq
+        </button>
+        <button class="provider-tab" id="tabOpenrouter" data-provider="openrouter" title="OpenRouter">
+          🔀 OpenRouter
+        </button>
+      </div>
+
+      <!-- Model selector -->
+      <select class="model-select" id="modelSelect">
+        <option value="">Loading…</option>
+      </select>
+    </div>
+
+    <div class="titlebar-right">
+      <button class="icon-btn interview-mode-toggle" id="interviewModeToggle" title="Live Assistant (real-time voice helper)">
+        <!-- microphone icon -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="settingsBtn" title="API Key settings">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 12 2v2a8 8 0 0 1 5.66 2.34M4.93 4.93A10 10 0 0 0 2 12h2a8 8 0 0 1 2.34-5.66M19.07 19.07A10 10 0 0 1 12 22v-2a8 8 0 0 0 5.66-2.34M4.93 19.07A10 10 0 0 0 12 22v-2a8 8 0 0 1-5.66-2.34"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="clearBtn" title="New Chat">
+        <!-- compose / new-chat icon -->
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.37 2.63a2 2 0 0 1 2.83 2.83L12 14.5l-4 1 1-4z"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="hideBtn" title="Hide">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Settings panel (slide-down) ── -->
+  <div class="settings-panel" id="settingsPanel" style="display:none;">
+    <div class="settings-row">
+      <label class="settings-label">Gemini API Key</label>
+      <div class="settings-input-row">
+        <input type="password" id="apiKeyInput" class="settings-input" placeholder="Paste your Gemini API key…" autocomplete="off" />
+        <button class="settings-save-btn" id="saveKeyBtn">Save</button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label">Groq API Key</label>
+      <div class="settings-input-row">
+        <input type="password" id="groqKeyInput" class="settings-input" placeholder="Paste your Groq API key…" autocomplete="off" />
+        <button class="settings-save-btn" id="saveGroqKeyBtn">Save</button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label">OpenRouter API Key</label>
+      <div class="settings-input-row">
+        <input type="password" id="openrouterKeyInput" class="settings-input" placeholder="Paste your OpenRouter API key…" autocomplete="off" />
+        <button class="settings-save-btn" id="saveOpenrouterKeyBtn">Save</button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <label class="settings-label">Deepgram API Key (optional — Live Assistant uses OpenRouter Nova-3 without it)</label>
+      <div class="settings-input-row">
+        <input type="password" id="deepgramKeyInput" class="settings-input" placeholder="Paste your Deepgram API key…" autocomplete="off" />
+        <button class="settings-save-btn" id="saveDeepgramKeyBtn">Save</button>
+      </div>
+    </div>
+    <div class="settings-row" style="margin-top:10px;">
+      <label class="settings-label" for="projectSelect">Projects (/3, /4, … in the chat)</label>
+      <select id="projectSelect" class="model-select" style="max-width:none;"></select>
+      <input type="text" id="projectNameInput" class="settings-input" maxlength="30" placeholder="Project name, e.g. Nova" autocomplete="off" />
+      <textarea id="projectInput" class="settings-input settings-textarea" rows="5" maxlength="60000"
+        placeholder="Describe the project: what it does, tech stack, architecture, key modules, constraints, conventions… Type its number (e.g. /3) or name in the chat to ask about it."></textarea>
+      <div class="settings-input-row" style="justify-content:space-between; align-items:center;">
+        <span class="settings-hint" id="projectCount" style="margin:0;">0 / 60000</span>
+        <span style="display:flex; gap:6px;">
+          <button class="settings-save-btn" id="deleteProjectBtn" style="background:#6b7280;" title="Delete this project">Delete</button>
+          <button class="settings-save-btn" id="saveProjectBtn">Save</button>
+        </span>
+      </div>
+    </div>
+    <div class="settings-row" style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+      <label class="settings-label" style="margin:0;" for="voiceSourceSelect">Voice input source</label>
+      <select id="voiceSourceSelect" class="model-select" style="max-width:150px;">
+        <option value="both">Mic + System audio</option>
+        <option value="mic">Microphone only</option>
+        <option value="system">System audio only</option>
+      </select>
+    </div>
+    <div class="settings-row" style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; margin-bottom:8px;">
+      <label class="settings-label" style="margin:0; cursor:pointer;" for="hideTrayCheckbox">Hide Tray/Menu Icon</label>
+      <input type="checkbox" id="hideTrayCheckbox" style="cursor:pointer; width:16px; height:16px;" />
+    </div>
+    <div class="settings-hint">Keys stored locally in config.json — never sent anywhere except their respective APIs</div>
+  </div>
+
+  <!-- ── Messages ── -->
+  <div class="messages" id="messages">
+    <div class="welcome" id="welcomeEl">
+      <div class="welcome-icon" id="welcomeIcon">🦙</div>
+      <div class="welcome-title" id="welcomeTitle">Ollama AI Assistant</div>
+      <div class="welcome-sub">Running 100% locally · Invisible to screen share</div>
+      <span class="shortcut-hint" id="shortcutHints"></span>
+    </div>
+  </div>
+
+  <!-- ── Screenshot preview (multi-image) ── -->
+  <div class="screenshot-preview" id="screenshotPreview" style="display:none;">
+    <div class="ss-header">
+      <span class="ss-label">📸 <span id="ssCount">1</span><span id="ssCountLabel"> image attached</span></span>
+      <button class="ss-remove-all" id="ssRemoveAll" title="Remove all">✕ all</button>
+    </div>
+    <div class="ss-thumbnails" id="ssThumbnails"></div>
+    <div class="ss-hint">Press Enter to analyze, or type a question first</div>
+  </div>
+
+  <!-- ── Input ── -->
+  <div class="input-area">
+    <div class="input-wrapper">
+      <textarea
+        id="userInput"
+        placeholder="Ask anything… (Enter to send, Shift+Enter for newline)"
+        rows="1"
+        autocomplete="off"
+        spellcheck="false"
+      ></textarea>
+      <button class="send-btn" id="sendBtn" title="Send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="input-footer">
+      <div class="footer-left">
+        <span id="modelLabel">No model selected</span>
+        <span class="mode-badge" id="modeBadge" title="Type /0 /1 /2 /3 to switch mode"></span>
+        <span class="img-limit-badge" id="imgLimitBadge" style="display:none;"></span>
+      </div>
+      <div class="footer-actions">
+        <button type="button" class="footer-icon-btn" id="voiceBtn" title="Voice input (listen & ask)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="2" width="6" height="12" rx="3"/>
+            <path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v4"/>
+          </svg>
+        </button>
+        <button type="button" class="footer-icon-btn" id="captureBtn" title="Screenshot">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/>
+            <circle cx="12" cy="13" r="3"/>
+          </svg>
+        </button>
+        <button type="button" class="footer-icon-btn" id="autoAnalyzeBtn" title="Auto-analyze screen">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/>
+          </svg>
+        </button>
+        <span class="ss-shortcut-hint" id="ssShortcutHint"></span>
+        <span class="quit-link" id="quitBtn">Quit</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Real-Time Interview Helper Modules -->
+  <script src="interview-helper/audioCapture.js"></script>
+  <script src="interview-helper/sttStream.js"></script>
+  <script src="interview-helper/sttOpenRouter.js"></script>
+  <script src="interview-helper/turnDetector.js"></script>
+  <script src="interview-helper/answerEngine.js"></script>
+  <script src="interview-helper/interviewHelperUI.js"></script>
+  <script src="interview-helper/init.js"></script>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

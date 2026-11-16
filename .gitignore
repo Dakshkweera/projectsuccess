@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# User config with API keys
+config.json
+
+# Packaged zips
+*.zip
+
+# macOS junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Local verification screenshots (contain screen captures)
+verification/

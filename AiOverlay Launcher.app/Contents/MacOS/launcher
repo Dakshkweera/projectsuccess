@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+APP_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+PROJECT_DIR="$(cd "$APP_DIR/.." && pwd)"
+ELECTRON_BIN="$PROJECT_DIR/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron"
+
+if [[ ! -x "$ELECTRON_BIN" ]]; then
+  osascript -e 'display alert "AiOverlay needs setup" message "Run npm install in the AiOverlay project folder first." as critical'
+  exit 1
+fi
+
+pkill -f "$PROJECT_DIR/node_modules/electron/dist/Electron.app" 2>/dev/null || true
+exec "$ELECTRON_BIN" "$PROJECT_DIR"

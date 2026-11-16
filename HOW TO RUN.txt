@@ -1,0 +1,190 @@
+=====================================================
+  AiOverlay - HOW TO UNZIP AND RUN (Windows 10 / 11)
+=====================================================
+
+You need: a 64-bit Windows 10 or 11 PC and an internet connection.
+Time: about 5 minutes (up to 15 if Option B is needed).
+
+
+-----------------------------------------------------
+STEP 1 - Unblock the zip (do this BEFORE extracting)
+-----------------------------------------------------
+1. Right-click the .zip file you received -> Properties.
+2. At the bottom, if you see "This file came from another computer..."
+   tick the "Unblock" box -> Apply -> OK.
+   (If there is no Unblock box, skip this.)
+
+
+-----------------------------------------------------
+STEP 2 - Extract to a SHORT path
+-----------------------------------------------------
+The project has very deep folders, and Windows fails on long paths.
+So do NOT extract into Downloads or the Desktop.
+
+1. Create a folder:  C:\AiOverlay
+2. Right-click the zip -> Extract All... -> Browse -> choose C:\AiOverlay -> Extract.
+3. Open C:\AiOverlay and keep opening folders until you see these files:
+       launch.bat, main.js, package.json, README.md, HOW TO RUN.txt
+   This is the "project folder". All the steps below happen here.
+
+
+-----------------------------------------------------
+STEP 3 - Start the app (Option A: try this first)
+-----------------------------------------------------
+1. In the project folder, double-click  launch.bat
+2. If a blue "Windows protected your PC" screen appears:
+   click "More info" -> "Run anyway".
+   (The app is not signed, so Windows shows this warning.)
+3. The overlay window opens.
+   The app is named "Chrome" and uses the Chrome logo. That is normal.
+
+If it opened, go to STEP 5.
+If nothing happens or you get an error, do Option B.
+
+
+-----------------------------------------------------
+STEP 4 - Option B: run from source with Node.js
+-----------------------------------------------------
+Only do this if Option A did not work.
+
+1. Install Node.js:
+   - Go to https://nodejs.org
+   - Download the "LTS" version for Windows (v22 is what we use).
+   - Run the installer and keep clicking Next. Leave all defaults on.
+   - RESTART the computer when it is done (or at least close all
+     open Command Prompt windows).
+
+2. Check it installed. Press Win+R, type  cmd , press Enter, then type:
+       node -v
+   You should see something like  v22.x.x .  If you get
+   "'node' is not recognized", reinstall Node.js and restart.
+
+3. Go to the project folder in that same window:
+       cd /d C:\AiOverlay\<the folder with launch.bat>
+   (Tip: type  cd /d  and a space, then drag the project folder
+   into the black window and press Enter.)
+
+4. Install the parts the app needs (only needed once, takes a few minutes):
+       npm install
+
+5. Start the app:
+       npm start
+
+   Next time you can just double-click launch.bat or run  npm start  again.
+
+
+-----------------------------------------------------
+STEP 5 - First-time setup: add your own API key
+-----------------------------------------------------
+API keys are NOT included in the zip. Each person uses their own (free).
+
+1. Click the gear icon (settings) in the overlay.
+2. Paste at least one key:
+   - Gemini key (free): https://aistudio.google.com  -> "Get API key"
+   - Groq key  (free): https://console.groq.com     -> "API Keys"
+3. Save. Type a question and press Enter to test it.
+
+(Optional) Ollama = run AI fully on your own PC. Install from
+https://ollama.com, then run  ollama serve  and pull a model.
+
+
+=====================================================
+  ALL SHORTCUTS AND COMMANDS
+=====================================================
+
+-- A) GLOBAL SHORTCUTS (work from ANY app, even when the overlay is hidden) --
+
+  SHORTCUT                  BACKUP KEY            WHAT IT DOES
+  ------------------------  --------------------  ----------------------------------------
+  Ctrl + Shift + Space      Ctrl + Shift + G      Show / hide the overlay
+  Ctrl + Shift + S          Ctrl + Alt + S        Take a screenshot and attach it to your
+                                                  next message (press again to add more)
+  Ctrl + Shift + A          Ctrl + Alt + A        Auto-solve: screenshot the screen and send
+                                                  it to the AI right away
+  Ctrl + Shift + N          Ctrl + Alt + C        New chat (clears chat, mode goes back to /0)
+  Ctrl + Alt + M            -                     Switch to the NEXT AI model
+  Ctrl + Alt + N            -                     Switch to the PREVIOUS AI model
+  Ctrl + Shift + Left       -                     Move overlay left
+  Ctrl + Shift + Right      -                     Move overlay right
+  Ctrl + Shift + Up         -                     Move overlay up
+  Ctrl + Shift + Down       -                     Move overlay down
+  Ctrl + Shift + =  (or +)  -                     Make overlay more solid (less see-through)
+  Ctrl + Shift + -          -                     Make overlay more see-through
+  Ctrl + Shift + J          Ctrl + Shift + K      Voice: start / stop listening (mic + PC
+                                                  sound), turns speech into text and sends it
+  Ctrl + Shift + Enter      Ctrl + Alt + Enter    Live Assistant: answer now (same as the
+                                                  lightning "Answer" button)
+  Ctrl + Shift + Q          -                     QUIT the app completely
+
+  "Backup key" = if the first shortcut is already used by another app,
+  the backup one is used instead.
+
+
+-- B) SHORTCUTS INSIDE THE OVERLAY (only when the overlay window is clicked/focused) --
+
+  Enter                     Send the message
+  Shift + Enter             New line (does not send)
+  Ctrl + N                  New chat
+  Alt + Down / Alt + Up     Scroll the chat down / up
+  Alt + End / Alt + Home    Jump to the bottom / top of the chat
+
+
+-- C) CHAT COMMANDS (type at the START of a message) --
+
+  COMMAND        ALSO WORKS        WHAT IT DOES
+  -------------  ----------------  ---------------------------------------------
+  /0             /general          Normal short-answer assistant (default mode)
+  /1             /dsa              DSA coach: explains topic, brute force,
+                                   optimal approach, dry run, C++17 code
+  /2             /systemdesign     Simple system design / LLD / machine-coding
+                                   helper
+  /3, /4, ...    project name,     Answers using a project you saved in
+                 e.g. /nova        Settings -> Projects (first project = /3,
+                 (/project = /3)   second = /4, and so on)
+
+  How to use them:
+  * "/1" alone           -> just switches to DSA mode.
+  * "/1 two sum"         -> switches to DSA mode AND asks "two sum".
+  * The current mode shows as a small badge next to the model name.
+  * The mode stays on for the whole chat. New chat (Ctrl+Shift+N) resets it to /0.
+  * Screenshot with no text -> the AI just solves what is in the screenshot.
+
+
+-- D) TRAY ICON (small icon near the clock, bottom-right) --
+
+  Click the icon            Show / hide the overlay
+  Right-click the icon      Menu: Show/Hide, Screenshot, Force Quit
+
+  Note: the overlay has NO taskbar button and does not show in Alt+Tab.
+  Use Ctrl+Shift+Space or the tray icon to find it.
+
+
+-----------------------------------------------------
+PROBLEMS?
+-----------------------------------------------------
+* "Path too long" or extraction errors
+    -> Extract to C:\AiOverlay as in STEP 2. Do not use Downloads.
+
+* Double-clicking launch.bat flashes a window and closes
+    -> Do Option B (STEP 4) so you can see the error message.
+
+* "'npm' is not recognized"
+    -> Node.js is not installed, or you did not restart after installing.
+
+* npm install fails / shows red errors
+    -> Check internet, then in the project folder delete the
+       node_modules folder and run  npm install  again.
+
+* Overlay does not show up
+    -> Press Ctrl + Shift + Space, or click the tray icon near the clock
+       (click the ^ arrow if it is hidden). It is NOT in the taskbar.
+
+* App is stuck or acting weird
+    -> Press Ctrl + Shift + Q to quit it fully, then start it again.
+
+* Shortcuts do nothing
+    -> Another app may already use the same shortcut. Close it and
+       restart the overlay.
+
+* AI does not reply / "invalid key"
+    -> Re-check the API key in settings (no extra spaces).
